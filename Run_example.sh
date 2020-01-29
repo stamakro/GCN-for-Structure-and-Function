@@ -7,7 +7,7 @@ PROTEINID=1ax8A
 FASTAFILE=example/${PROTEINID}.fasta
 EMBFILE=example/${PROTEINID}.embeddings.pkl
 
-python scripts/seqvec_embedder.py --input=${FASTAFILE} --output=${EMBFILE} --model=test/uniref50_v2
+python scripts/seqvec_embedder.py --input=${FASTAFILE} --output=${EMBFILE}
 
 
 # Get distance map from PDB structure
