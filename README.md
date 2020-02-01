@@ -1,10 +1,8 @@
 # GCN-for-Structure-and-Function
 ## Datasets
 The datasets used will be made available via the 4TU.Centre for Research Data repository (https://data.4tu.nl/)
-using the following DOIs:
+using the following DOI:
 
 Trained models and _PDB_ dataset: 10.4121/uuid:b88d84e1-7408-40d9-a8fc-d734f852dd7a
 
-_CAFA3_ dataset:
-
-_SP_ dataset (only the test set due to  large size):
+The _CAFA3_ and _SP_ datasets are not provided due to their large size. They can be generated using the provided code or provided upon request.
