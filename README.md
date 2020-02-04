@@ -1,8 +1,8 @@
 # GCN-for-Structure-and-Function
 ## Datasets
-For each dataset (_PDB_, _SP_ and _CAFA_) there is a data_* directory with the training/validation/test protein IDs, the information content (IC) vector and the MFO GO term matrix. All the models_* directories and the feats_pdb for the _PDB_ dataset will be made available via the 4TU.Centre for Research Data repository (https://data.4tu.nl/) using the following DOI: 
+For each dataset (_PDB_, _SP_ and _CAFA_) there is a data_* directory with the training/validation/test protein IDs, the information content (IC) vector and the MFO GO term matrix. All the models_* directories and the feats_pdb for the _PDB_ dataset are available in the 4TU.Centre for Research Data (https://data.4tu.nl/) repository: 
 
-10.4121/uuid:b88d84e1-7408-40d9-a8fc-d734f852dd7a
+https://data.4tu.nl/repository/uuid:b88d84e1-7408-40d9-a8fc-d734f852dd7a
 
 The _SP_ and _CAFA_ features are not provided due to their large size. They can be generated using the example code or provided upon request.
 
