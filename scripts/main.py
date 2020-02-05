@@ -37,6 +37,9 @@ parser.add_argument('--fc_dim',         dest='fc_dim',          type=int,       
 parser.add_argument('--num_classes',    dest='num_classes',     type=int,       default=256)
 parser.add_argument('--cheb_order',     dest='cheb_order',      type=int,       default=2) # for 'chebcn'
 
+#input format
+parser.add_argument('--protein_level',     dest='protein_level',      type=bool,       default=False) # if true the embeddings are expected to be given as protein-level, else aa-level
+
 # Training directories and files
 parser.add_argument('--model_dir',      dest='model_dir',       default='models/GCN')
 parser.add_argument('--train_file',     dest='train_file',      default='data/train.names')
@@ -65,20 +68,20 @@ if args.net_type == 'gcn' or args.net_type == 'chebcn' or args.net_type == 'gmmc
 
 elif args.net_type == 'cnn1d':
     net = CNN1D_dilated(input_dim=args.input_dim, num_filters=list(map(int, args.channel_dims.split("_"))),
-                        filter_sizes=list(map(int, args.filter_sizes.split("_"))), 
+                        filter_sizes=list(map(int, args.filter_sizes.split("_"))),
                         fc_dim=args.fc_dim, num_classes=args.num_classes).to(device)
 
 elif args.net_type == 'cnn2d':
     net = CNN2D(input_dim=1, num_filters=list(map(int, args.channel_dims.split("_"))),
-                filter_sizes=list(map(int, args.filter_sizes.split("_"))), 
+                filter_sizes=list(map(int, args.filter_sizes.split("_"))),
                 fc_dim=args.fc_dim, num_classes=args.num_classes).to(device)
 
 elif args.net_type == 'cnn1d2d':
-    net = CNN1D2D(input_dim_1d=args.input_dim, input_dim_2d=1, 
+    net = CNN1D2D(input_dim_1d=args.input_dim, input_dim_2d=1,
                   num_filters_1d=list(map(int, args.channel_dims.split("_"))),
-                  filter_sizes_1d=list(map(int, args.filter_sizes.split("_"))), 
+                  filter_sizes_1d=list(map(int, args.filter_sizes.split("_"))),
                   num_filters_2d=list(map(int, args.channel_dims.split("_"))),
-                  filter_sizes_2d=list(map(int, args.filter_sizes.split("_"))), 
+                  filter_sizes_2d=list(map(int, args.filter_sizes.split("_"))),
                   fc_dim=args.fc_dim, num_classes=args.num_classes).to(device)
 
 elif args.net_type == 'mlp':
@@ -143,16 +146,16 @@ if args.phase == 'train':
         valid_loader = pyDataLoader(valid_set, batch_size=1, shuffle=False, collate_fn=cnn1d2d_collate)
 
     elif args.net_type == 'mlp':
-        train_set = MLPDataset(args.train_file, args.feats_dir, args.feats_type)
+        train_set = MLPDataset(args.train_file, args.feats_dir, args.feats_type, args.protein_level)
         train_loader = pyDataLoader(train_set, batch_size=args.batch_size, shuffle=True, num_workers=1, collate_fn=mlp_collate)
         train_loader_eval = pyDataLoader(train_set, batch_size=1, shuffle=False, collate_fn=mlp_collate)
         valid_set = MLPDataset(args.valid_file, args.feats_dir, args.feats_type)
         valid_loader = pyDataLoader(valid_set, batch_size=1, shuffle=False, collate_fn=mlp_collate)
 
     # Training and validation
-    train(device=device, net=net, criterion=criterion, 
-          learning_rate=args.init_lr, lr_sched=args.lr_sched, num_epochs=args.num_epochs, 
-          train_loader=train_loader, train_loader_eval=train_loader_eval, valid_loader=valid_loader, 
+    train(device=device, net=net, criterion=criterion,
+          learning_rate=args.init_lr, lr_sched=args.lr_sched, num_epochs=args.num_epochs,
+          train_loader=train_loader, train_loader_eval=train_loader_eval, valid_loader=valid_loader,
           icvec=icvec, ckpt_dir=ckpt_dir, logs_dir=logs_dir)
 
 
@@ -164,7 +167,7 @@ elif args.phase == 'test' or args.phase == 'extract':
     if args.net_type == 'gcn' or args.net_type == 'chebcn' or args.net_type == 'gmmcn' or args.net_type == 'gincn':
         test_set = GraphDataset(args.test_file, args.feats_dir, args.feats_type, args.edges_type)
         test_loader = pygeoDataLoader(test_set, batch_size=1, shuffle=False)
-    
+
     elif args.net_type == 'cnn1d':
         test_set = CNN1DDataset(args.test_file, args.feats_dir, args.feats_type)
         test_loader = pyDataLoader(test_set, batch_size=1, shuffle=False, collate_fn=cnn1d_collate)
@@ -178,7 +181,7 @@ elif args.phase == 'test' or args.phase == 'extract':
         test_loader = pyDataLoader(test_set, batch_size=1, shuffle=False, collate_fn=cnn1d2d_collate)
 
     elif args.net_type == 'mlp':
-        test_set = MLPDataset(args.test_file, args.feats_dir, args.feats_type)
+        test_set = MLPDataset(args.test_file, args.feats_dir, args.feats_type, args.protein_level)
         test_loader = pyDataLoader(test_set, batch_size=1, shuffle=False, collate_fn=mlp_collate)
 
     # Test
@@ -187,7 +190,7 @@ elif args.phase == 'test' or args.phase == 'extract':
             test_loader=test_loader, icvec=icvec, save_file=args.save_file)
     # Embedding extractor
     elif args.phase == 'extract':
-        extract(device=device, net=net, model_file=args.model_file, 
+        extract(device=device, net=net, model_file=args.model_file,
                 names_file=args.test_file, loader=test_loader, save_file=args.emb_save_file)
 
 
