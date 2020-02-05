@@ -149,7 +149,7 @@ if args.phase == 'train':
         train_set = MLPDataset(args.train_file, args.feats_dir, args.feats_type, args.protein_level)
         train_loader = pyDataLoader(train_set, batch_size=args.batch_size, shuffle=True, num_workers=1, collate_fn=mlp_collate)
         train_loader_eval = pyDataLoader(train_set, batch_size=1, shuffle=False, collate_fn=mlp_collate)
-        valid_set = MLPDataset(args.valid_file, args.feats_dir, args.feats_type)
+        valid_set = MLPDataset(args.valid_file, args.feats_dir, args.feats_type, args.protein_level)
         valid_loader = pyDataLoader(valid_set, batch_size=1, shuffle=False, collate_fn=mlp_collate)
 
     # Training and validation

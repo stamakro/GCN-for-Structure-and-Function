@@ -243,12 +243,11 @@ class Perceptron(nn.Module):
         # Define fully-connected layers and dropout
         #assume that there will at least 1 hidden layer, otherwise use logistic regression in sklearn
 
-        fc_dim = [input_dim] + fc_dim
+        fc_dims = [input_dim] + fc_dim
 
         self.layers = []
-        self.dropouts = []
 
-        fc_layers = [nn.Linear(fc_dims[i-1], fc_dims[i]) for in in range(1, len(fc_dims)]
+        fc_layers = [nn.Linear(fc_dims[i-1], fc_dims[i]) for i in range(1, len(fc_dims))]
         self.fc = nn.ModuleList(fc_layers)
 
         self.drop = nn.Dropout(p=0.4)
