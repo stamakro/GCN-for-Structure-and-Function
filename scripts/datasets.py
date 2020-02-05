@@ -74,7 +74,7 @@ class GraphDataset(Dataset):
 
         return Data(x=torch.from_numpy(features),
                     edge_index=torch.from_numpy(edges),
-                    y=torch.from_numpy(labels), 
+                    y=torch.from_numpy(labels),
                     pseudo=torch.from_numpy(U))
 
 
@@ -133,13 +133,13 @@ class CNN2DDataset(Dataset):
             self.lengths = data[:,1].astype(np.int)
         except:
             self.names = data
-            
+
         self.feats_dir = feats_dir
 
     def __len__(self):
         # Get total number of samples
         return len(self.names)
-        
+
     def get_one(self, name):
         # Load pickle file with dictionary containing sequence (L) and labels (1xN)
         d = pickle.load(open(self.feats_dir + '/' + name + '.pkl', 'rb'))
@@ -152,16 +152,16 @@ class CNN2DDataset(Dataset):
 
         # Get labels (N)
         labels = d['labels'].toarray().astype(np.float32).squeeze()
-        
+
         return cmap, seqlen, labels
 
     def __getitem__(self, index):
         # Load batch of samples
         batch_names = self.names[np.squeeze(index)]
-        
+
         try:
             batch_cmaps, batch_lengths, batch_labels = self.get_one(batch_names)
-            
+
         except:
             batch_cmaps = []
             batch_lengths = []
@@ -171,7 +171,7 @@ class CNN2DDataset(Dataset):
                 batch_cmaps.append(cmap)
                 batch_lengths.append(seqlen)
                 batch_labels.append(labels)
-        
+
         return batch_cmaps, batch_lengths, batch_labels
 
 
@@ -185,10 +185,10 @@ class CNN1D2DDataset(Dataset):
             self.lengths = data[:,1].astype(np.int)
         except:
             self.names = data
-            
+
         self.feats_dir = feats_dir
         self.feats_type = feats_type
-        
+
         if self.feats_type == 'onehot':
             # Init dictionary for one-hot encoding
             alphabet = 'ARNDCQEGHILKMFPSTWYVUOBZJX'
@@ -197,7 +197,7 @@ class CNN1D2DDataset(Dataset):
     def __len__(self):
         # Get total number of samples
         return len(self.names)
-        
+
     def get_one(self, name):
         # Load pickle file with dictionary containing embeddings (LxF), sequence (L) and labels (1xN)
         d = pickle.load(open(self.feats_dir + '/' + name + '.pkl', 'rb'))
@@ -221,19 +221,19 @@ class CNN1D2DDataset(Dataset):
         else:
             print('[!] Unknown features type, try "embeddings" or "onehot".')
             exit(0)
-        
+
         # Get labels (N)
         labels = d['labels'].toarray().astype(np.float32).squeeze()
-        
+
         return cmap, embeddings, seqlen, labels
 
     def __getitem__(self, index):
         # Load batch of samples
         batch_names = self.names[np.squeeze(index)]
-        
+
         try:
             batch_cmaps, batch_embeddings, batch_lengths, batch_labels = self.get_one(batch_names)
-            
+
         except:
             batch_cmaps = []
             batch_embeddings = []
@@ -245,17 +245,19 @@ class CNN1D2DDataset(Dataset):
                 batch_embeddings.append(embeddings)
                 batch_lengths.append(seqlen)
                 batch_labels.append(labels)
-        
+
         return batch_cmaps, batch_embeddings, batch_lengths, batch_labels
 
 
 
 class MLPDataset(Dataset):
-    def __init__(self, names_file, feats_dir, feats_type='embeddings'):
+    def __init__(self, names_file, feats_dir, feats_type='embeddings', protein_level='False'):
         # Initialize data
         self.names = list(np.loadtxt(names_file, dtype=str))
         self.feats_dir = feats_dir
         self.feats_type = feats_type
+        #aa-level of protein-level embeddings
+        self.protein_level = protein_level
 
         if self.feats_type == 'onehot':
             # Init dictionary for one-hot encoding
@@ -277,7 +279,10 @@ class MLPDataset(Dataset):
 
         # Select features type
         if self.feats_type == 'embeddings':
-            features = d['embeddings'].T
+            if self.protein_level:
+                features = d['embeddings']
+            else:
+                features = d['embeddings'].T
 
         elif self.feats_type == 'onehot':
             features = np.zeros((len(self.ohdict), seqlen), dtype=np.float32)
@@ -289,7 +294,8 @@ class MLPDataset(Dataset):
             exit(0)
 
         # Get protein-level features
-        features = np.mean(features, 1)
+        if not self.protein_level:
+            features = np.mean(features, 1)
 
         # Get labels (N)
         labels = d['labels'].toarray().astype(np.float32).squeeze()
