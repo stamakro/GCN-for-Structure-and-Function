@@ -1,6 +1,5 @@
 import numpy as np
 import pickle
-
 import torch
 from torch.utils.data import Dataset
 from torch_geometric.data import Data
