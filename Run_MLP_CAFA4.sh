@@ -23,7 +23,7 @@ elif [[ $NUMHIDDENLAYERS == 2 ]];  then FCDIM="512_512";
 fi
 
 
-MODELDIR=models_${SET}/MLP_E
+MODELDIR="exp/"$ONTOLOGY"_mlp_"$NUMHIDDENLAYERS
 
 mkdir -p ${MODELDIR}
 
