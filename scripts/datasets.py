@@ -250,7 +250,7 @@ class CNN1D2DDataset(Dataset):
 
 
 class MLPDataset(Dataset):
-    def __init__(self, names_file, feats_dir, feats_type='embeddings', protein_level='False'):
+    def __init__(self, names_file, feats_dir, feats_type='embeddings', protein_level=False):
         # Initialize data
         self.names = list(np.loadtxt(names_file, dtype=str))
         self.feats_dir = feats_dir
