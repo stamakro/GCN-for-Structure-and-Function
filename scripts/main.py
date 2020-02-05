@@ -38,7 +38,7 @@ parser.add_argument('--num_classes',    dest='num_classes',     type=int,       
 parser.add_argument('--cheb_order',     dest='cheb_order',      type=int,       default=2) # for 'chebcn'
 
 #input format
-parser.add_argument('--protein_level',     dest='protein_level',      type=bool,       default=False) # if true the embeddings are expected to be given as protein-level, else aa-level
+parser.add_argument('--protein_level',     dest='protein_level',      type=int,       default=0) # if true the embeddings are expected to be given as protein-level, else aa-level
 
 # Training directories and files
 parser.add_argument('--model_dir',      dest='model_dir',       default='models/GCN')
