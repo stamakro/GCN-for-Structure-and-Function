@@ -9,13 +9,13 @@ class MLP(nn.Module):
         super(MLP, self).__init__()
         self.mlp = nn.Sequential(nn.Linear(input_dim, hidden_dim, bias=True), nn.ReLU(inplace=True),
                                  nn.Linear(hidden_dim, output_dim, bias=True), nn.ReLU(inplace=True))
-        
+
     def forward(self, x):
         return self.mlp(x)
 
 
 class GraphCNN(nn.Module):
-    def __init__(self, input_dim=1024, net_type='gcn', channel_dims=[256, 256, 512], fc_dim=512, num_classes=256, 
+    def __init__(self, input_dim=1024, net_type='gcn', channel_dims=[256, 256, 512], fc_dim=512, num_classes=256,
                  cheb_order=2):
         super(GraphCNN, self).__init__()
 
@@ -57,7 +57,7 @@ class GraphCNN(nn.Module):
         else:
             for gcn_layer in self.gcn:
                 x = F.relu(gcn_layer(x.float(), data.edge_index.long(), data.pseudo.float()))
-        
+
         # Apply global sum pooling and dropout
         x = global_add_pool(x, data.batch)
         x = self.drop(x)
@@ -85,7 +85,7 @@ class CNN1D_dilated(nn.Module):
 
         # Define global max pooling
         self.globalpool = nn.AdaptiveMaxPool1d(1)
-        
+
         # Define dropout
         self.drop = nn.Dropout(p=0.3)
 
@@ -113,7 +113,7 @@ class CNN1D_dilated(nn.Module):
         # Compute fully-connected part
         if self.fc_dim > 0:
             x = F.relu(self.fc(x))
-        
+
         output = self.fc_out(x)   # sigmoid in loss function
 
         return embedding, output
@@ -160,7 +160,7 @@ class CNN2D(nn.Module):
         # Compute fully-connected part
         if self.fc_dim > 0:
             x = F.relu(self.fc(x))
-        
+
         output = self.fc_out(x)   # sigmoid in loss function
 
         return embedding, output
@@ -205,7 +205,7 @@ class CNN1D2D(nn.Module):
     def forward(self, data):
         x1d = data.emb
         x2d = data.x
-        
+
         mask1d = data.mask1d
         mask2d = data.mask
 
@@ -215,14 +215,14 @@ class CNN1D2D(nn.Module):
         # Apply global max pooling and dropout
         x1d = self.globalpool1d(x1d)
         x1d = torch.flatten(x1d, 1)
-        
+
         # Compute 2D convolutional part
         for cnn2d_layer in self.cnn2d:
             x2d = F.relu(torch.mul(cnn2d_layer(x2d), mask2d))   # apply mask
         # Apply 2D global max pooling
         x2d = self.globalpool2d(x2d)
         x2d = torch.flatten(x2d, 1)
-        
+
         # Concatenate 1D-CNN and 2D-CNN outputs
         x = torch.cat((x1d, x2d), axis=1)
         embedding = x
@@ -231,29 +231,37 @@ class CNN1D2D(nn.Module):
         if self.fc_dim > 0:
             x = F.relu(self.fc(x))
         x = self.drop(x)
-                
+
         output = self.fc_out(x)   # sigmoid in loss function
 
         return embedding, output
 
-
-
 class Perceptron(nn.Module):
-    def __init__(self, input_dim=1024, fc_dim=512, num_classes=256):
+    def __init__(self, input_dim=1024, fc_dim=[512], num_classes=256):
         super(Perceptron, self).__init__()
 
-         # Define fully-connected layers and dropout
-        self.layer1 = nn.Linear(input_dim, fc_dim)
+        # Define fully-connected layers and dropout
+        #assume that there will at least 1 hidden layer, otherwise use logistic regression in sklearn
+
+        fc_dim = [input_dim] + fc_dim
+
+        self.layers = []
+        self.dropouts = []
+
+        fc_layers = [nn.Linear(fc_dims[i-1], fc_dims[i]) for in in range(1, len(fc_dims)]
+        self.fc = nn.ModuleList(fc_layers)
+
         self.drop = nn.Dropout(p=0.4)
-        self.layer2 = nn.Linear(fc_dim, num_classes)
+        self.fc_out = nn.Linear(fc_dims[-1], num_classes)
 
     def forward(self, data):
         x = data.x
 
-        # Compute fully-connected part and apply dropout
-        x = F.relu(self.layer1(x))
-        x = self.drop(x)
+        for fc_layer in self.fc:
+            x = F.relu(fc_layer(x))
+            x = self.drop(x)
+
         embedding = x
-        output = self.layer2(x)   # sigmoid in loss function
+        output = self.fc_out(x)
 
         return embedding, output

@@ -33,7 +33,7 @@ parser.add_argument('--edges_type',     dest='edges_type',      default='normal'
 parser.add_argument('--input_dim',      dest='input_dim',       type=int,       default=1024)
 parser.add_argument('--channel_dims',   dest='channel_dims',    type=str,       default='256_256_512')
 parser.add_argument('--filter_sizes',   dest='filter_sizes',    type=str,       default='5_5') # for 'cnn1d' and 'cnn2d'
-parser.add_argument('--fc_dim',         dest='fc_dim',          type=int,       default=512)
+parser.add_argument('--fc_dim',         dest='fc_dim',          type=str,       default='512')
 parser.add_argument('--num_classes',    dest='num_classes',     type=int,       default=256)
 parser.add_argument('--cheb_order',     dest='cheb_order',      type=int,       default=2) # for 'chebcn'
 
@@ -85,7 +85,7 @@ elif args.net_type == 'cnn1d2d':
                   fc_dim=args.fc_dim, num_classes=args.num_classes).to(device)
 
 elif args.net_type == 'mlp':
-    net = Perceptron(input_dim=args.input_dim, fc_dim=args.fc_dim, num_classes=args.num_classes).to(device)
+    net = Perceptron(input_dim=args.input_dim, fc_dim=list(map(int, args.fc_dim.split("_"))), num_classes=args.num_classes).to(device)
 
 else:
     print('[!] Unknown network type, try "gcn", "chebcn", "gmmcn", "gincn", "cnn1d", "cnn2d", "cnn1d2d" or "mlp".')
