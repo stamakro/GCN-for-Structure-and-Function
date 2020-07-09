@@ -14,7 +14,7 @@ with open(filename, 'rb') as fr:
 Ytest = d['y_true']
 Ypost = d['y_pred']
 
-termIC = np.load(icvec)
+termIC = np.load(icvecfile)
 
 print(model)
 print('AvgPrec: ', average_precision_score(Ytest, Ypost, average='samples'))

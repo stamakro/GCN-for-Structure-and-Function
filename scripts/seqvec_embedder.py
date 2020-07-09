@@ -94,7 +94,7 @@ def get_embeddings( seq_dir, emb_path, model_dir, split_char, id_field, cpu,
 
     seq_dict2 = dict()
     for k in seq_dict:
-        if len(seq_dict[k]) < 1000:
+        if len(seq_dict[k]) <= 1000:
             seq_dict2[k] = seq_dict[k]
     seq_dict = seq_dict2
     ####################### Sort sequences ###############################
