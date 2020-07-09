@@ -13,25 +13,19 @@ NUMCLASS=256
 DATADIR=data_${SET}
 FEATSDIR=feats_${SET}
 
+CHDIMS='512'
 CHEBORDER=0
 if [[ $MODELTYPE == 'gcn' ]]; then
-    if [[ $NLAYERS == 1 ]]; then
-        CHDIMS='512'
-        PREFIX=GCN1
+    if [[ $NLAYERS == 1 ]]; then PREFIX=GCN1;
     elif [[ $NLAYERS == 3 ]]; then
         CHDIMS='256_256_512'
         PREFIX=GCN3
     fi
 elif [[ $MODELTYPE == 'chebcn' ]]; then
     CHEBORDER=$6
-    CHDIMS='512'
     PREFIX=CHEBCN_K${CHEBORDER}
-elif [[ $MODELTYPE == 'gmmcn' ]]; then
-    CHDIMS='512'
-    PREFIX=GMMCN
-elif [[ $MODELTYPE == 'gincn' ]]; then
-    CHDIMS='512'
-    PREFIX=GINCN
+elif [[ $MODELTYPE == 'gmmcn' ]]; then PREFIX=GMMCN;
+elif [[ $MODELTYPE == 'gincn' ]]; then PREFIX=GINCN;
 fi
 
 if [[ $FEATSTYPE == 'degree' ]]; then

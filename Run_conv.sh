@@ -40,7 +40,7 @@ fi
 mkdir -p ${MODELDIR}
 
 
-# 1D-CNN
+# 1D-CNN, 2D-CNN, 1D-CNN+2D-CNN
 python scripts/main.py --phase=${PHASE} \
 --batch_size=64 --num_epochs=100 --init_lr=0.0005 --lr_sched='True' \
 --net_type=${MODELTYPE} --feats_type=${FEATSTYPE} --input_dim=${INPUTDIM} \
