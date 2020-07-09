@@ -2,60 +2,48 @@
 
 
 # PDB dataset
-./Run_BASELINE.sh pdb onehot
-./Run_BASELINE.sh pdb embeddings
+./Run_baseline.sh pdb onehot
+./Run_baseline.sh pdb embeddings
 
-./Run_MLP.sh pdb onehot test
-./Run_MLP.sh pdb embeddings test
+./Run_mlp.sh pdb onehot test
+./Run_mlp.sh pdb embeddings test
 
-./Run_1DCNN.sh pdb onehot test
-./Run_1DCNN.sh pdb embeddings test
+./Run_conv.sh pdb cnn1d onehot test
+./Run_conv.sh pdb cnn1d embeddings test
+./Run_conv.sh pdb cnn2d nofeats test
+./Run_conv.sh pdb cnn1d2d onehot test
+./Run_conv.sh pdb cnn1d2d embeddings test
 
-./Run_GCN3.sh onehot test
-./Run_GCN3.sh embeddings test
+./Run_graphconv.sh gcn 3 onehot normal test
+./Run_graphconv.sh gcn 3 embeddings normal test
+./Run_graphconv.sh gcn 1 degree normal test
+./Run_graphconv.sh gcn 1 onehot normal test
+./Run_graphconv.sh gcn 1 embeddings normal test
+./Run_graphconv.sh gcn 1 embeddings random test
+./Run_graphconv.sh gcn 1 embeddings identity test
 
-./Run_GCN1.sh nofeats test
-./Run_GCN1.sh onehot test
-./Run_GCN1.sh embeddings test
-
-./Run_GCN1_perturb.sh random test
-./Run_GCN1_perturb.sh identity test
-
-./Run_CHEBCN.sh 2 nofeats test
-./Run_CHEBCN.sh 2 onehot test
-./Run_CHEBCN.sh 2 embeddings test
-./Run_CHEBCN.sh 10 nofeats test
-./Run_CHEBCN.sh 10 onehot test
-./Run_CHEBCN.sh 10 embeddings test
-
-./Run_GINCN.sh nofeats test
-./Run_GINCN.sh onehot test
-./Run_GINCN.sh embeddings test
-
-./Run_GMMCN.sh nofeats test
-./Run_GMMCN.sh onehot test
-./Run_GMMCN.sh embeddings test
-
-./Run_2DCNN.sh test
-
-./Run_1DCNN-2DCNN.sh onehot test
-./Run_1DCNN-2DCNN.sh embeddings test
-
+./Run_graphconv.sh chebcn 1 onehot normal test 2
+./Run_graphconv.sh chebcn 1 embeddings normal test 2
+./Run_graphconv.sh chebcn 1 onehot normal test 10
+./Run_graphconv.sh chebcn 1 embeddings normal test 10
+./Run_graphconv.sh gmmcn 1 onehot normal test
+./Run_graphconv.sh gmmcn 1 embeddings normal test
+./Run_graphconv.sh gincn 1 onehot normal test
+./Run_graphconv.sh gincn 1 embeddings normal test
 
 
 # SP dataset
-./Run_BASELINE.sh sp onehot
-./Run_BASELINE.sh sp embeddings
+./Run_baseline.sh sp onehot
+./Run_baseline.sh sp embeddings
 
-./Run_MLP.sh sp onehot test
-./Run_MLP.sh sp embeddings test
+./Run_mlp.sh sp onehot test
+./Run_mlp.sh sp embeddings test
 
-./Run_1DCNN.sh sp onehot test
-./Run_1DCNN.sh sp embeddings test
-
+./Run_conv.sh sp cnn1d onehot test
+./Run_conv.sh sp cnn1d embeddings test
 
 
 # CAFA dataset
-./Run_BASELINE.sh cafa embeddings
-./Run_MLP.sh cafa embeddings test
-./Run_1DCNN.sh cafa embeddings test
+./Run_baseline.sh cafa embeddings
+./Run_mlp.sh cafa embeddings test
+./Run_conv.sh cafa cnn1d embeddings test

@@ -18,7 +18,7 @@ python scripts/convert_pdb_to_distmap.py ${PDBFILE} ${DMAPFILE}
 
 
 # Create dictionary with all needed features
-LABELSFILE=data_pdb/Yterms.pkl
+LABELSFILE=datasets/data_pdb/Yterms.pkl
 OUTFILE=example/${PROTEINID}.pkl
 
 python scripts/generate_feats.py ${PROTEINID} ${FASTAFILE} ${EMBFILE} ${DMAPFILE} ${LABELSFILE} ${OUTFILE}

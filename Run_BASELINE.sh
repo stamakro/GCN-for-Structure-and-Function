@@ -4,12 +4,12 @@
 SET=$1
 FEATSTYPE=$2
 
-if 	 [[ $SET == 'pdb' ]];  then NUMCLASS=256;
-elif [[ $SET == 'sp' ]];   then NUMCLASS=441;
+if [[ $SET == 'pdb' ]]; then NUMCLASS=256;
+elif [[ $SET == 'sp' ]]; then NUMCLASS=441;
 elif [[ $SET == 'cafa' ]]; then NUMCLASS=679;
 fi
 
-DATADIR=data_${SET}
+DATADIR=datasets/data_${SET}
 FEATSDIR=feats_${SET}
 
 OUTDIR=models_${SET}/BASELINE
