@@ -120,6 +120,43 @@ class CNN1D_dilated(nn.Module):
 
 
 
+
+class CNN1D_DeepGoPlus(nn.Module):
+    def __init__(self, input_dim=26, num_filters=16*[512], filter_sizes=list(range(8,129,8)), num_classes=256):
+        super(CNN1D_DeepGoPlus, self).__init__()
+
+        # Define 1D convolutional layers
+        cnn_layers = [nn.Conv1d(input_dim, num_filters[i], kernel_size=filter_sizes[i], padding=int(filter_sizes[i]/2)-1)
+                      for i in range(len(num_filters))]
+        self.cnn = nn.ModuleList(cnn_layers)
+
+        # Define global max pooling
+        pool_layers = [nn.AdaptiveMaxPool1d(1) for _ in num_filters]
+        self.globalpool = nn.ModuleList(pool_layers)
+
+        # Define fully-connected layers
+        self.fc_out = nn.Linear(sum(num_filters), num_classes)
+
+    def forward(self, data):
+        x = data.x
+
+        # Compute 1D convolutional part and apply global max pooling
+        all_x = []
+        for cnn_layer, pool_layer in zip(self.cnn, self.globalpool):
+            all_x.append(pool_layer(cnn_layer(x)))
+
+        # Concatenate all channels and flatten vector
+        x = torch.cat(all_x, dim=1)
+        x = torch.flatten(x, 1)
+        embedding = x
+        
+        # Compute fully-connected part
+        output = self.fc_out(x)   # sigmoid in loss function
+
+        return embedding, output
+
+
+
 class CNN2D(nn.Module):
     def __init__(self, input_dim=1, num_filters=[64, 512], filter_sizes=[5, 5], fc_dim=512, num_classes=256):
         super(CNN2D, self).__init__()
