@@ -1,5 +1,7 @@
 # Unsupervised protein embeddings outperform hand-crafted sequence and structure features at predicting molecular function
-This repository contains the source code and data needed to reproduce the results of the pre-print:
+This repository contains the source code and data needed to reproduce the results of the paper by Villegas-Morcillo et al.:
+https://academic.oup.com/bioinformatics/advance-article/doi/10.1093/bioinformatics/btaa701/5892762
+Previous version (pre-print):
 https://www.biorxiv.org/content/10.1101/2020.04.07.028373v1
 
 ## Datasets
