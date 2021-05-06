@@ -70,7 +70,7 @@ preshed==2.0.1
 prompt-toolkit==2.0.9
 protobuf==3.10.0
 ptyprocess==0.6.0
-py==1.8.0
+py==1.10.0
 pyasn1==0.4.7
 pyasn1-modules==0.2.7
 Pygments==2.7.4
