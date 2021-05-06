@@ -21,7 +21,7 @@ docutils==0.15.2
 editdistance==0.5.3
 flaky==3.6.1
 Flask==1.1.1
-Flask-Cors==3.0.8
+Flask-Cors==3.0.9
 ftfy==5.6
 gevent==1.4.0
 google-auth==1.6.3
